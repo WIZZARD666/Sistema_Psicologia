@@ -1,0 +1,14 @@
+{
+    "name": "yahir/compo",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Yahir\\Compo\\": "Model/"
+        }
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "dompdf/dompdf": "^3.1"
+    }
+}

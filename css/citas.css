@@ -1,0 +1,44 @@
+
+#calendar {
+        min-width: 0;
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+        transition: font-size 0.2s;
+        box-sizing: border-box;
+        /* Asegura que el padding no cause overflow */
+        overflow-x: auto;
+        /* Si algo se desborda, solo el calendario hace scroll interno */
+    }
+
+        
+    @media (max-width: 576px) {
+        #calendar {
+            font-size: 0.80rem;
+        }
+    }
+
+    @media (min-width: 577px) and (max-width: 768px) {
+        #calendar {
+            font-size: 0.90rem;
+        }
+    }
+
+    @media (min-width: 769px) and (max-width: 992px) {
+        #calendar {
+            font-size: 1rem;
+        }
+    }
+
+    @media (min-width: 993px) {
+        #calendar {
+            font-size: 1.05rem;
+        }
+    }
+
+    
+
+    /* Paleta de colores para un estilo más elegante en tonos de gris y azul */
+
+    /* Importar fuente de Google Fonts (asegúrate de que el usuario tenga conexión) */
+    @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap');

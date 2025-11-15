@@ -1,0 +1,126 @@
+:root {
+        /*
+        Paleta de colores solicitada:
+        --color1: #DBE1F0;
+        --color2: #A7D0D8;
+        --color3: #ABCDDD;
+        --color4: #E0C323;
+        --color5: #75A5B8;
+        */
+        
+        --color1: #DBE1F0; /* Fondo o borde sutil (usado para la tarjeta) */
+        --color2: #A7D0D8; /* Color para el avatar */
+        --color3: #ABCDDD; /* Color para sombra o detalles */
+        --color4: #E0C323; /* Amarillo/Dorado para el botón de clave */
+        --color5: #75A5B8; /* Azul oscuro para el botón principal */
+    }
+
+    /* Ajuste para el contenido principal (si usas un sidebar de 17%) */
+    .profile-main-content {
+        margin-left: 17%;
+        padding: 2.5rem 2rem;
+        background: #fff;
+        border-radius: 24px;
+        /* Usamos color3 para la sombra */
+        box-shadow: 0 8px 32px rgba(171, 205, 221, 0.30); /* Usando el color3 con opacidad */
+        min-height: 100vh;
+        margin-top: 2.5rem;
+        margin-bottom: 2.5rem;
+        max-width: 600px;
+    }
+
+    .profile-card {
+        background: #fff;
+        border-radius: 22px;
+        /* Usamos color3 para la sombra */
+        box-shadow: 0 0 24px rgba(171, 205, 221, 0.25); /* Usando el color3 con opacidad */
+        /* Usamos color1 para el borde, que es más suave */
+        border: 1.5px solid var(--color1); 
+        max-width: 480px;
+        margin: 0 auto;
+        padding: 2.5rem 2.2rem 2rem 2.2rem;
+    }
+
+    .profile-avatar {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        background: var(--color2); /* Usamos color2 para el fondo del avatar */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3.2rem;
+        color: #fff;
+        margin: 0 auto 1.2rem auto;
+    }
+
+    .profile-title {
+        color: #222;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .profile-data {
+        margin-bottom: 1.2rem;
+    }
+
+    .profile-data label {
+        color: #888;
+        font-weight: 500;
+        font-size: 0.97rem;
+        margin-bottom: 0.1rem;
+        display: block; 
+    }
+
+    .profile-data .value {
+        color: #222;
+        font-size: 1.08rem;
+        font-weight: 500;
+        margin-bottom: 0.8rem;
+        display: block;
+    }
+
+    .profile-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 1.5rem;
+    }
+
+    .btn-edit {
+        background: var(--color5); /* Usamos color5 para el botón principal */
+        color: #fff;
+        border: none;
+        font-weight: 500;
+        border-radius: 16px;
+        padding: 0.6rem 1.3rem;
+        transition: background 0.2s;
+    }
+
+    .btn-edit:hover {
+        background: #5d9ab0; /* Un tono más oscuro de color5 */
+    }
+
+    .btn-password {
+        background: var(--color4); /* Usamos color4 para el botón de clave */
+        color: #fff;
+        border: none;
+        font-weight: 500;
+        border-radius: 16px;
+        padding: 0.6rem 1.3rem;
+        transition: background 0.2s;
+    }
+
+    .btn-password:hover {
+        background: #c7a91e; /* Un tono más oscuro de color4 */
+    }
+
+    @media (max-width: 900px) {
+        .profile-main-content {
+            margin-left: 0;
+            padding: 1.2rem 0.5rem;
+            max-width: 100%;
+            margin-top: 1rem;
+        }
+    }

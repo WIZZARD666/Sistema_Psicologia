@@ -1,0 +1,187 @@
+:root {
+    --color1: #DBE1F0;
+    --color2: #A7D0D8;
+    --color3: #ABCDDD;
+    --color4: #E0C323;
+    --color5: #75A5B8;
+    --anim-duration: 0.6s; /* Nueva variable para la duración de animaciones */
+}
+
+/* ------------------------------------------------------------------- */
+/* 🌐 BODY (Fondo) */
+/* ------------------------------------------------------------------- */
+body {
+    font-family: 'Quicksand', 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, var(--color1) 0%, var(--color2) 40%, var(--color3) 100%);
+    min-height: 100vh;
+    
+    /* Animación de carga para que el fondo aparezca suavemente */
+    animation: fadeInBackground var(--anim-duration) ease-out forwards;
+}
+
+@keyframes fadeInBackground {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* ------------------------------------------------------------------- */
+/* ⬅️ SIDEBAR (Menú Lateral) */
+/* ------------------------------------------------------------------- */
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    width: 17%;
+    background: linear-gradient(180deg, var(--color1) -10%, var(--color5) 100%);
+    box-shadow: 8px 0 20px rgba(117,165,184,0.13);
+    padding-top: 8px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    
+    /* Animación: se desliza desde la izquierda al cargar */
+    animation: slideInLeft var(--anim-duration) ease-out forwards;
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.sidebar-sticky {
+    padding: 0;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* ------------------------------------------------------------------- */
+/* 🔗 ENLACES DEL SIDEBAR (Se mantiene la transición existente) */
+/* ------------------------------------------------------------------- */
+.sidebar .nav-link {
+    color: #507685;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 10px 18px;
+    margin: 6px 7px;
+    border-radius: 16px;
+    /* Mantenemos las transiciones fluidas */
+    transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease; 
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.sidebar .nav-link:hover {
+    background: var(--color3); /* Usamos el color claro para el hover */
+    color: #2c3e50; /* Texto más oscuro para contraste con el hover claro */
+    transform: none; /* Quitamos el desplazamiento y la escala para un hover más sutil */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Sombra muy ligera */
+}
+
+.sidebar .nav-link.active,
+.sidebar .nav-link[aria-current="page"] {
+    background: linear-gradient(90deg, var(--color5), var(--color3)); /* Fondo fuerte */
+    color: #fff; /* Texto blanco */
+    font-weight: bold;
+    box-shadow: 0 6px 16px rgba(117, 165, 184, 0.4); /* Sombra marcada */
+    border: 1.5px solid var(--color5);
+    transform: scale(1.05); /* Mantenemos el efecto de escala para que destaque */
+}
+
+/* ------------------------------------------------------------------- */
+/* 🚪 ENLACE CERRAR SESIÓN (Se mantiene la transición existente) */
+/* ------------------------------------------------------------------- */
+.sidebar .nav-item.mt-auto .nav-link {
+    background: linear-gradient(90deg,rgb(206, 62, 77), #c8232e);
+    color: #fff;
+    font-weight: 700;
+    /* Añadimos un pequeño efecto de pulsación para destacar */
+    transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+}
+.sidebar .nav-item.mt-auto .nav-link:hover {
+    background: linear-gradient(90deg, #c8232e, #dc3545);
+    color: #fff;
+    transform: scale(1.02); /* Se agranda un poco al pasar el mouse */
+    box-shadow: 0 0 15px rgba(220, 53, 69, 0.4); /* Resplandor rojo */
+}
+
+/* ------------------------------------------------------------------- */
+/* 👤 ÍCONO DE PERFIL (Se mantiene la transición existente) */
+/* ------------------------------------------------------------------- */
+.profile-icon-container {
+    position: absolute;
+    top: 18px;
+    right: 32px;
+    z-index: 10;
+}
+.profile-icon-container a {
+    display: block;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: var(--color1);
+    border: 2px solid var(--color5);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    /* Ya tienes transición: transition: transform 0.2s; */
+}
+.profile-icon-container a:hover {
+    transform: scale(1.07);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.22);
+}
+.profile-icon-link {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--color1);
+    border: 2px solid var(--color5);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.10);
+    /* Ya tienes transición: transition: transform 0.2s, box-shadow 0.2s; */
+    margin-right: 8px;
+}
+.profile-icon-link:hover {
+    transform: scale(1.08);
+    box-shadow: 0 4px 12px rgba(117,165,184,0.18);
+    background: var(--color3);
+}
+
+/* ------------------------------------------------------------------- */
+/* 🖼️ CONTENIDO PRINCIPAL (Se desliza desde la derecha) */
+/* ------------------------------------------------------------------- */
+.main-content {
+    margin-left: 17%;
+    padding: 2.5rem 2rem;
+    background: #fff;
+    border-radius: 24px 0 0 24px;
+    box-shadow: 0 8px 32px rgba(117,165,184,0.10);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    /* Animación: se desliza desde la derecha con un ligero retraso */
+    animation: slideInRight var(--anim-duration) ease-out 0.1s backwards; 
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}

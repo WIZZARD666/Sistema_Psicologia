@@ -1,0 +1,379 @@
+:root {
+            --color1: #DBE1F0; /* Fondo claro/botones */
+            --color2: #A7D0D8;
+            --color3: #ABCDDD;
+            --color4: #E0C323; /* Amarillo/Dorado (Primario de acción/énfasis) */
+            --color5: #75A5B8; /* Azul Grisáceo (Texto/Secundario) */
+        }
+        
+        /* NOTA: Se ha eliminado el 'margin-left: 17%' y el CSS de posicionamiento del .main-content 
+        para respetar el diseño de navegación lateral existente en 'css/navegacion.css' y 'menu/menu.php'.
+        */
+        .main-content {
+            padding: 2.5rem 2rem;
+            background: #fff;
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.10); /* Sombra estándar */
+            min-height: 100vh;
+            margin-top: 2.5rem;
+            margin-bottom: 2.5rem;
+            animation: fadeInDown 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        @keyframes fadeInDown {
+            0% { opacity: 0; transform: translateY(-40px);}
+            100% { opacity: 1; transform: translateY(0);}
+        }
+        
+        /* Icono de Cerebro (Reemplaza el emoji de saludo y usa color 5 para el icono) */
+        .greeting-emoji {
+            font-size: 4.5rem; /* Más grande */
+            color: var(--color5); /* Usando el color azul grisáceo para el icono */
+            animation: pulse-sutil 2s infinite alternate; /* Animación de pulsación */
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+        @keyframes pulse-sutil {
+            0% { transform: scale(1); opacity: 0.9;}
+            100% { transform: scale(1.05); opacity: 1;}
+        }
+
+        .greeting-title {
+            color: var(--color5);
+            font-weight: 900;
+            font-size: 2.8rem; /* Más prominente */
+            letter-spacing: 1.5px;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Contenedor del Rol (Actualizado con icono) */
+        .role-container {
+            font-size: 1.25rem;
+            color: var(--color5); /* Usando el color secundario */
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            animation: fadeIn 1.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px; /* Espacio entre el icono y el texto */
+        }
+        .role-icon {
+            color: var(--color5); /* Icono del color de énfasis */
+            font-size: 1.5rem;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        /* Contenedor del mensaje motivacional (donde estaba greeting-text) */
+        .motivational-message-box {
+            min-height: 3rem; /* Para evitar saltos de diseño */
+        }
+
+        /* Estilo para el Mensaje Motivacional Vistoso (clase inyectada por JS) */
+        .motivation-card {
+            background: var(--color1); /* Fondo claro de tu paleta */
+            border: 2px solid var(--color5); /* Borde con el color secundario */
+            color: var(--color5);
+            padding: 1.25rem;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(117, 165, 184, 0.2);
+            transition: all 0.5s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            max-width: 600px;
+            margin: 1.5rem auto 2.5rem; /* Centrado */
+        }
+        .motivation-icon-large {
+            font-size: 2.5rem;
+            color: var(--color4); /* Usando el color de énfasis (amarillo) */
+            animation: rotateIn 0.7s;
+        }
+        .motivation-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        @keyframes rotateIn {
+            0% { opacity: 0; transform: rotate(-90deg) scale(0.5); }
+            100% { opacity: 1; transform: rotate(0deg) scale(1); }
+        }
+        /* Fin de estilos del mensaje motivacional */
+
+        .quick-actions {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .quick-action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.7rem;
+            background: var(--color1);
+            color: var(--color5);
+            border: none;
+            border-radius: 16px;
+            padding: 1rem 1.7rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(117, 165, 184, 0.2); /* Sombra con color 5 */
+            /* Transición y efecto hover */
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            cursor: pointer;
+            min-width: 220px; /* Ancho fijo para que se vean iguales */
+        }
+        .quick-action-btn:hover {
+            background: var(--color5);
+            color: #fff;
+            transform: translateY(-3px) scale(1.05); /* Efecto 3D sutil */
+            box-shadow: 0 8px 15px rgba(117, 165, 184, 0.4);
+        }
+        
+        .main-footer {
+            margin-top: 2rem;
+            font-size: 0.95rem;
+            color: #888;
+            text-align: center;
+        }
+        
+        /* Ajuste responsivo, asumiendo que el menú lateral se oculta o se mueve en mobile */
+        @media (max-width: 991.98px) {
+            .main-content {
+                margin-left: 0; /* Asegura que el contenido use todo el ancho en mobile */
+                padding: 1.5rem 0.5rem;
+                margin-top: 1.2rem;
+            }
+            .quick-actions {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .quick-action-btn {
+                min-width: 90%;
+            }
+        }
+        /* Estilos para el modal del mini juego */
+        #miniGameModal {
+            transition: opacity 0.3s ease;
+            opacity: 0;
+            display: none; /* Controlado por JS, pero por defecto invisible */
+        }
+        #miniGameModal.show {
+            opacity: 1;
+            display: flex;
+        }
+        #miniGameContent {
+            animation: modalPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes modalPop {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .game-title {
+            color: var(--color5);
+            font-weight: 700;
+        }
+
+        /*nuevo css de lo pedido por la profesora skeleton screen */
+
+         /* IMPLEMENTACIÓN: Skeleton Screens (Instrucción 2) */
+         /* 
+         * INSTRUCCIÓN 2: Skeletor (Skeleton Screens)
+         * - Adaptado específicamente para la estructura actual
+         * - Simula cerebro animado, título, rol y botones
+         * - Se integra perfectamente con el diseño existente
+         */
+        .skeleton-container {
+            display: none; /* Oculto por defecto, se muestra durante carga */
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        /* Skeleton del cerebro animado */
+        .skeleton-emoji {
+            width: 72px; /* Tamaño similar al cerebro real */
+            height: 72px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+        }
+        
+        /* Skeleton del título principal */
+        .skeleton-title {
+            width: 320px; /* Ancho similar al título real */
+            height: 44px; /* Altura similar al título real */
+            border-radius: 8px;
+            margin: 0 auto 1rem;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+        }
+        
+        /* Skeleton del contenedor del rol */
+        .skeleton-role-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 0 auto 1.5rem;
+            width: 400px;
+        }
+        
+        .skeleton-role-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+        }
+        
+        .skeleton-role-text {
+            width: 250px;
+            height: 24px;
+            border-radius: 6px;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+        }
+        
+        /* Skeleton del mensaje motivacional */
+        .skeleton-message {
+            width: 500px;
+            height: 80px;
+            border-radius: 12px;
+            margin: 0 auto 2.5rem;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+        }
+        
+        /* Skeleton de los botones de acción rápida */
+        .skeleton-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .skeleton-button {
+            width: 220px; /* Mismo ancho que los botones reales */
+            height: 56px; /* Misma altura que los botones reales */
+            border-radius: 16px;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+        }
+        
+        /* Animación del efecto "onda" para skeleton screens */
+        @keyframes skeleton-loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+        
+        /* Estados para controlar la visibilidad */
+        .content-loaded {
+            display: block;
+        }
+        
+        .content-loading {
+            display: none;
+        }
+        
+        /* Responsive para skeleton */
+        @media (max-width: 991.98px) {
+            .skeleton-title {
+                width: 250px;
+                height: 38px;
+            }
+            
+            .skeleton-role-container {
+                width: 300px;
+            }
+            
+            .skeleton-role-text {
+                width: 180px;
+            }
+            
+            .skeleton-message {
+                width: 90%;
+                max-width: 350px;
+                height: 60px;
+            }
+            
+            .skeleton-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+            
+            .skeleton-button {
+                width: 90%;
+                max-width: 280px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .skeleton-title {
+                width: 200px;
+                height: 32px;
+            }
+            
+            .skeleton-role-container {
+                width: 250px;
+            }
+            
+            .skeleton-role-text {
+                width: 150px;
+            }
+            
+            .skeleton-message {
+                height: 50px;
+            }
+        }
+
+         /* IMPLEMENTACIÓN: Previews LQIP (Instrucción 1B) */
+        /* 
+         * INSTRUCCIÓN 1B: Previews (Placeholders Inteligentes)
+         * - Técnica LQIP (Low-Quality Image Placeholder) o "Blur-Up"
+         * - Muestra versión comprimida y desenfocada primero
+         * - Transición suave a imagen de alta resolución
+         */
+        .lqip-image {
+            filter: blur(20px); /* Efecto blur para imagen de baja calidad */
+            transition: filter 0.5s ease; /* Transición suave al cargar */
+        }
+        
+        .lqip-image.loaded {
+            filter: blur(0); /* Elimina blur cuando la imagen está cargada */
+        }
+
+
+         /* IMPLEMENTACIÓN: Lazy Loading (Instrucción 1A) */
+        /* 
+         * INSTRUCCIÓN 1A: Lazy Loading con Intersection Observer
+         * - Carga diferida de recursos fuera del viewport
+         * - Control fino con Intersection Observer API
+         * - Transición de opacidad para suavizar la aparición
+         */
+        .lazy-image {
+            opacity: 0; /* Inicialmente invisible */
+            transition: opacity 0.3s ease; /* Transición suave al cargar */
+        }
+        
+        .lazy-image.loaded {
+            opacity: 1; /* Visible cuando está cargada */
+        }

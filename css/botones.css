@@ -1,0 +1,195 @@
+/* Definición de la duración de transición para ser consistente */
+:root {
+    /* ... (asegúrate de mantener tus colores aquí) ... */
+    --transition-fast: 0.2s;
+    --transition-medium: 0.3s;
+}
+
+/* ------------------------------------------------------------------- */
+/* 📝 INPUTS, TEXTAREAS, SELECTS y FOCUS (Formularios en modales) */
+/* ------------------------------------------------------------------- */
+.modal-body input, textarea,
+.modal-body select {
+    border: 2px solid #c9c9c9;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    /* Transición suave para el borde y la sombra */
+    transition: border-color var(--transition-medium) ease, box-shadow var(--transition-medium) ease;
+}
+
+.form-control:focus {
+    /* Animación de "resplandor" al enfocarse */
+    border: 2px solid var(--color4);
+    box-shadow: 0 0 0 0.25rem rgba(224, 195, 35, 0.25); /* Aumentamos ligeramente la intensidad del resplandor */
+    background: #fff;
+    /* Quitamos la propiedad transition de aquí, ya está en el input base */
+}
+
+/* ------------------------------------------------------------------- */
+/* 🚀 BOTONES DE ACCIÓN (btn-accion: Editar, Eliminar, Detalles, Cita) */
+/* ------------------------------------------------------------------- */
+.btn-accion {
+    border-radius: 12px;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border: none;
+    /* Transición general para todos los cambios de hover */
+    transition: all var(--transition-fast) ease;
+}
+
+/* Efecto de Levantamiento al pasar el mouse */
+.btn-accion:hover {
+    transform: translateY(-1px); /* Se levanta 1px */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Sombra más fuerte */
+}
+
+.btn-editar {
+    background: var(--color4);
+    color: #4B4949;
+}
+
+.btn-editar:hover {
+    background: #c7a91e;
+    color: #222;
+}
+
+.btn-eliminar {
+    background: #ff5c5c;
+    color: #fff;
+}
+
+.btn-eliminar:hover {
+    background: #e04a4a;
+    /* Para que el color del fondo cambie suavemente */
+}
+
+.btn-detalles {
+    background: var(--color5);
+    color: #fff;
+}
+
+.btn-detalles:hover {
+    background: #5a8ca1;
+}
+
+.btn-cita {
+    background: #1abc9c;
+    color: #fff;
+}
+
+.btn-cita:hover {
+    background: #159c7c;
+}
+
+/* ------------------------------------------------------------------- */
+/* 🌟 BOTÓN PRIMARIO (General) */
+/* ------------------------------------------------------------------- */
+.btn-primary {
+    background: var(--color5);
+    border: none;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 20px;
+    padding: 0.6rem 1.5rem;
+    /* Transición para el hover */
+    transition: all var(--transition-medium) ease;
+}
+
+.btn-primary:hover {
+    background: var(--color4); /* Mantiene tu cambio de color a amarillo */
+    transform: scale(1.02); /* Se agranda ligeramente */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* ------------------------------------------------------------------- */
+/* 🌐 OTROS ELEMENTOS */
+/* ------------------------------------------------------------------- */
+.input-group-text {
+    background: var(--color1);
+    border: none;
+    color: var(--color5);
+    font-size: 1.2rem;
+    /* Transición para el color y el fondo, por si cambian de estado */
+    transition: all var(--transition-medium) ease;
+}
+
+.modal-content {
+    border-radius: 18px;
+    /* Pequeña transición para la sombra al abrir/cerrar (depende de JS de Bootstrap) */
+    transition: box-shadow var(--transition-medium) ease;
+}
+
+.modal-header {
+    background: var(--color5);
+    color: #fff;
+    border-bottom: none;
+}
+
+.modal-title {
+    font-weight: bold;
+}
+ /* ESTILOS PARA EL BOTÓN DE AYUDA FLOTANTE (FAB) */
+        /* ESTILOS PARA EL BOTÓN DE AYUDA FLOTANTE (FAB) */
+        #help-button-fab {
+            /* Fija el botón en la ventana del navegador */
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            /* Asegura que esté por encima de todos los elementos (como modales y tablas) */
+            z-index: 1060;
+            /* Define el tamaño del botón */
+            width: 55px;
+            height: 55px;
+            /* Centra el ícono */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+
+            /* CAMBIO DE COLOR: Usaremos --color5 para un azul más serio y de interfaz */
+            background-color: var(--color5) !important;
+            border-color: var(--color5) !important;
+            color: #fff;
+            /* Ícono blanco */
+            transition: all 0.3s;
+            /* Animación más suave */
+        }
+
+        #help-button-fab:hover {
+            /* CAMBIO EN EL HOVER: Ligeramente más claro */
+            transform: scale(1.1);
+            background-color: var(--color2) !important;
+            /* Usar el azul claro en hover */
+            border-color: var(--color2) !important;
+        }
+
+        #help-button-fab i {
+            line-height: 1;
+        }
+
+
+/* ------------------------------------------------------------------- */
+/* 📱 MEDIA QUERIES (se mantienen sin cambios en la estructura) */
+/* ------------------------------------------------------------------- */
+@media (max-width: 991.98px) {
+    .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+        box-shadow: none;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 1rem 0.2rem;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .main-content {
+        margin-left: 0;
+        padding: 1rem 0.2rem;
+    }
+}
