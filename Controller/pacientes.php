@@ -1,160 +1,72 @@
 <?php
-use Yahir\Compo\Pacientes as PacientesModelo;
-ob_start();
-// Inicia sesión si no está iniciada
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+
+// 1. Verificar la existencia del nuevo Modelo Paciente
+if (!is_file("./Model/Pacientes.php")) {
+    echo "No se encontró el modelo Pacientes.";
+    exit;
 }
-// Incluye el modelo de pacientes
 
+// Incluir el archivo del modelo para que la clase esté disponible
+require_once("./Model/Pacientes.php");
 
-// Devuelve todos los pacientes
+// Usar el alias del nuevo modelo Pacientes
+use Yahir\Compo\Pacientes as PacientesModelo;
+
 function listarpaciente(){
     $paciente = new PacientesModelo();
     return $paciente->listarpaciente();
 }
 
-// Devuelve un paciente por ID
-function obtenerpaciente($id){
-    $paciente = new PacientesModelo();
-    return $paciente->obtenerpaciente($id);
-}
+$ruta_vista = './View/pacientes.php';
 
-// Crea un paciente y su ubicación
-function crearpaciente($nombre, $apellido, $cedula, $telefono, $fecha_nacimiento, $genero, $ciudad, $pais, $email, $foto){
-    $paciente = new PacientesModelo();
-    $id_ubicacion = $paciente->crearUbicacion($ciudad, $pais);
-    $paciente->setNombre($nombre);
-    $paciente->setapellido($apellido);
-    $paciente->setcedula($cedula);
-    $paciente->settelefono($telefono); 
-    $paciente->setfecha_nacimiento($fecha_nacimiento);
-    $paciente->setgenero($genero);
-    $paciente->setIdUbicacion($id_ubicacion);
-    $paciente->setemail($email);
-    $paciente->setFoto($foto);
-    return $paciente->crearpaciente(); 
-}
+if (is_file($ruta_vista)) {
 
-// Actualiza un paciente y su ubicación
-function actualizarpaciente($id, $nombre, $apellido, $cedula, $telefono, $fecha_nacimiento, $genero, $ciudad, $pais, $email,$foto){
-    $paciente = new PacientesModelo();
-    $paciente->setId($id);
-    $id_ubicacion = $paciente->obtenerIdUbicacionPorPaciente($id);
-    $paciente->actualizarUbicacion($id_ubicacion, $ciudad, $pais);
-    $paciente->setNombre($nombre);
-    $paciente->setapellido($apellido);
-    $paciente->setcedula($cedula);
-    $paciente->settelefono($telefono); 
-    $paciente->setfecha_nacimiento($fecha_nacimiento);
-    $paciente->setgenero($genero);
-    $paciente->setemail($email);
-    $paciente->setFoto($foto);
-    return $paciente->actualizarpaciente(); 
-}
+    // Si hay datos POST, significa que se está intentando ejecutar una acción CRUD
+    if (!empty($_POST)) {
+        $o = new PacientesModelo();
+        // Evitar warning cuando 'accion' no viene en el POST
+        $accion = $_POST['accion'] ?? '';
 
-// Elimina un paciente (solo de la tabla paciente)
-function eliminarpaciente($id_paciente){
-    $paciente = new PacientesModelo();
-    return $paciente->eliminarpaciente($id_paciente);
-}
+        if ($accion === 'consultar') {
+            // Acción CONSULTAR: Solo se llama al método consultar()
+            echo json_encode($o->consultar());
+        } 
+        else if ($accion === 'eliminar') {
+            // Acción ELIMINAR: Solo requiere la cédula
+            $o->set_cedula($_POST['cedula'] ?? '');
+            echo json_encode($o->eliminar());
+        } 
+        else {
+            // Acciones REGISTRAR o MODIFICAR: Requieren todos los atributos
 
-// --- PROCESA FORMULARIO DE CREAR PACIENTE ---
-if (isset($_POST['guardara'])) {
-    // Valida campos requeridos y crea paciente
-    $nombre = $_POST['nombre'] ?? null;
-    $apellido = $_POST['apellido'] ?? null;
-    $cedula = $_POST['cedula'] ?? null;
-    $telefono = $_POST['telefono'] ?? null;
-    $fecha_nacimiento = $_POST['fecha_nacimiento'] ?? null;
-    $genero = $_POST['genero'] ?? null;
-    $ciudad = $_POST['ciudad'] ?? null;
-    $pais = $_POST['pais'] ?? null;
-    $email = $_POST['email'] ?? null;
-    $foto_nombre = null;
+            // 3. Asignar los nuevos atributos al modelo
+            $o->set_cedula($_POST['cedula'] ?? '');
+            $o->set_nombre($_POST['nombre'] ?? '');
+            $o->set_apellido($_POST['apellido'] ?? '');
+            $o->set_telefono($_POST['telefono'] ?? '');
+            $o->set_email($_POST['email'] ?? '');
+            $o->set_fecha_nacimiento($_POST['fecha_nacimiento'] ?? '');
+            $o->set_genero($_POST['genero'] ?? '');
+            $o->set_pais($_POST['pais'] ?? ''); // Nuevo campo de ubicación
+            $o->set_ciudad($_POST['ciudad'] ?? ''); // Nuevo campo de ubicación
 
-     if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
-        $fotoTmp = $_FILES['foto']['tmp_name'];
-        $fotoOriginal = $_FILES['foto']['name'];
-        $extension = strtolower(pathinfo($fotoOriginal, PATHINFO_EXTENSION));
-        $foto_nombre = $cedula . '.' . $extension;
-        $directorio = BASE_PATH . 'img/usuarios/';
-        if (!is_dir($directorio)) {
-            mkdir($directorio, 0777, true);
-        }
-        $destino = $directorio . $foto_nombre;
-        move_uploaded_file($fotoTmp, $destino);
-    }
+            // Nota: El id_paciente se establece solo si se modifica (a menudo no se pasa en el POST, 
+            // pero se usa la cédula como identificador principal).
 
-    if (!empty($nombre) && !empty($apellido) && !empty($email) && !empty($cedula)) {
-        crearpaciente($nombre, $apellido, $cedula, $telefono, $fecha_nacimiento, $genero, $ciudad, $pais, $email, $foto_nombre);
-    }
-}
-
-// --- PROCESA FORMULARIO DE ACTUALIZAR PACIENTE ---
-if (isset($_POST['actualizar_paciente_submit'])) {
-    $id_paciente = $_POST['id_paciente'] ?? null;
-    if ($id_paciente) {
-        $foto_nombre = '';
-        if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
-            $fotoTmp = $_FILES['foto']['tmp_name'];
-            $fotoOriginal = $_FILES['foto']['name'];
-            $extension = strtolower(pathinfo($fotoOriginal, PATHINFO_EXTENSION));
-            $foto_nombre = $_POST['cedula'] . '.' . $extension;
-            $directorio = BASE_PATH . 'img/usuarios/';
-            if (!is_dir($directorio)) {
-                mkdir($directorio, 0777, true);
+            if ($accion === 'registrar') {
+                echo json_encode($o->registrar());
             }
-            $destino = $directorio . $foto_nombre;
-            move_uploaded_file($fotoTmp, $destino);
+            else if ($accion === 'modificar') {
+                echo json_encode($o->modificar());
+            }
         }
 
-        actualizarpaciente(
-            $id_paciente,
-            $_POST['nombre'] ?? null,
-            $_POST['apellido'] ?? null,
-            $_POST['cedula'] ?? null,
-            $_POST['telefono'] ?? null,
-            $_POST['fecha_nacimiento'] ?? null,
-            $_POST['genero'] ?? null,
-            $_POST['ciudad'] ?? null,
-            $_POST['pais'] ?? null,
-            $_POST['email'] ?? null,
-            null,
-            $foto_nombre
-        );
+        exit; // Detiene la ejecución después de manejar la petición AJAX
     }
-}
 
-// --- PROCESA PETICIÓN AJAX PARA ELIMINAR PACIENTE ---
-if (isset($_POST['accion']) && $_POST['accion'] === 'eliminarpaciente' && isset($_POST['id_paciente'])) {
-    echo json_encode([
-        "mensaje" => "EXITO",
-        "success" => eliminarpaciente($_POST['id_paciente'])
-    ]);
-    exit;
-}
 
-// --- RESPUESTA AJAX PARA LISTAR PACIENTES CON FILTRO ---
-if (isset($_POST['ajax']) && $_POST['ajax'] == 1) {
-    header('Content-Type: application/json');
-    $filtro = strtolower($_POST['filtro'] ?? '');
-    $todosLosPacientes = listarpaciente();
-    $pacientesFiltrados = $todosLosPacientes;
-    if (!empty($filtro)) {
-        $pacientesFiltrados = array_filter($todosLosPacientes, function ($paciente) use ($filtro) {
-            return (stripos($paciente['nombre'], $filtro) !== false) ||
-                (stripos($paciente['apellido'], $filtro) !== false) ||
-                (isset($paciente['cedula']) && stripos($paciente['cedula'], $filtro) !== false) ||
-                (isset($paciente['telefono']) && stripos($paciente['telefono'], $filtro) !== false);
-        });
-    }
-    echo json_encode(['pacientes' => array_values($pacientesFiltrados)]);
-    exit;
-}
+        require_once('./View/pacientes.php');
 
-// --- CARGA LA VISTA PRINCIPAL DE PACIENTES ---
-$pacientes = listarpaciente();
-require_once BASE_PATH . 'View/pacientes.php';
-ob_end_flush();
-?>
+} else {
+    echo 'Vista de Pacientes no encontrada:';
+}

@@ -113,7 +113,7 @@
                         <form id="formNuevoTratamiento" method="post">
                             <div class="row mb-3">
                                 <div class="col-md-6">
-                                    <label for="id_paciente" class="form-label">Paciente *</label>
+                                    <label for="id_paciente" class="form-label">Paciente</label>
                                     <select class="form-select" id="id_paciente" name="id_paciente" required>
                                         <option value="">Seleccione un paciente</option>
                                         <?php foreach ($pacientes as $paciente): ?>
@@ -338,9 +338,9 @@
 
     <script src="js/Jquery.min.js"></script>
     <script src="js/bootstrap.bundle.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-    <script src="js/tratamientoss.js"></script>
+    <script src="js/datatables.min.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/tratamientos.js"></script>
     <script src="js/main.js">
 
     </script>

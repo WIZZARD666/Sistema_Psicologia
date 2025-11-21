@@ -9,12 +9,13 @@
     <title>Personal</title>
     <?php require_once("menu/head.php"); ?>
     <?php require_once("menu/menu.php"); ?>
-    <link rel="stylesheet" href="css/pacientess.css">
+    <link rel="stylesheet" href="css/pacientes.css">
 
 </head>
 
 <body class="bg-light font-primary text-dark">
-    <div class="container-fluid">
+
+  <div class="container-fluid">
         <div class="row">
             <!-- Menú lateral -->
             <?php require_once('menu/menu.php'); ?>
@@ -211,13 +212,12 @@
 
 <script src="js/bootstrap.bundle.js"></script>
 
-
-<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+<script src="js/datatables.min.js"></script>
+<script src="js/data.js"></script>
 
 <script src="js/formUtilss.js"></script>
 
-<script src="js/Personall.js"></script>
+<script src="js/Personal.js"></script>
 <script src="js/main.js"></script>
 
 

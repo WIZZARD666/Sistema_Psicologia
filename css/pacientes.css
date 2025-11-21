@@ -1,0 +1,17 @@
+.dataTables_wrapper .dataTables_filter {
+    text-align: left !important; /* Alinea el buscador a la izquierda */
+    margin-bottom: 15px; /* Espacio debajo del buscador */
+}
+
+/* Opcional: Estilos para el contenedor de la tabla dentro de la tarjeta */
+.card-body .dataTables_wrapper {
+    padding: 0 1rem; /* Ajusta el padding si la tabla se ve muy pegada a los lados */
+}
+
+/* Ajuste para eliminar posibles bordes restantes */
+.dataTables_wrapper table.dataTable thead th,
+.dataTables_wrapper table.dataTable thead td,
+.dataTables_wrapper table.dataTable tbody th,
+.dataTables_wrapper table.dataTable tbody td {
+    border-bottom: none; /* Elimina bordes inferiores si aparecen */
+}

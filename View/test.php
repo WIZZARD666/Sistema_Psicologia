@@ -151,9 +151,10 @@
     <script src="js/Jquery.min.js"></script>
     <script src="js/bootstrap.bundle.js"></script>
 
-    <!-- DataTables JS -->
-    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-    <script src="js/testsss.js"></script>
+    <script src="js/datatables.min.js"></script>
+    <script src="js/data.js"></script>
+
+    <script src="js/tests.js"></script>
     <script src="js/main.js"></script>
 </body>
 

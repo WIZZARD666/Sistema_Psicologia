@@ -223,6 +223,34 @@ class Personal extends Conexion
         return $respuesta;
     }
 
+    // Comprueba existencia por cédula (sin cambios mayores)
+    private function existe($cedula)
+    {
+        // Se puede añadir aquí una validación simple de $cedula si el método es público, 
+        // pero como es privado y se llama desde registrar/modificar, confiamos en la validación principal.
+
+        $respuesta = array();
+        Conexion::conectar();
+        $q = Conexion::getConexion();
+        $q->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        try {
+            $consulta = $q->prepare("SELECT * FROM personal WHERE cedula = :cedula");
+            $consulta->bindValue(':cedula', $cedula);
+            $consulta->execute();
+            $fila = $consulta->fetchAll(PDO::FETCH_BOTH);
+            if ($fila) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception $e) {
+            $respuesta['mensaje'] = $e->getMessage();
+            $respuesta['resultado'] = "error";
+        }
+        // Si hay error en la base de datos, lo más seguro es asumir que no existe y dejar que la operación falle.
+        return false;
+    }
+
 
     // Registrar
     public function registrar()
@@ -262,7 +290,9 @@ class Personal extends Conexion
                 $respuesta['mensaje'] = $e->getMessage();
             }
         } else {
-            $respuesta['resultado'] = 'registrar';
+            // 🛑 ¡CORRECCIÓN CRÍTICA AQUÍ!
+            // Si el empleado ya existe, devolvemos 'cedula_existe' para que el JS active el SweetAlert de error.
+            $respuesta['resultado'] = 'cedula_existe';
             $respuesta['mensaje'] = "Ya existe un empleado con esta cedula.";
         }
         return $respuesta;
@@ -288,7 +318,6 @@ class Personal extends Conexion
             try {
                 if (!empty($this->password)) {
                     // Si se proporciona clave, actualiza con la clave en texto plano.
-                    // Se ha quitado password_hash(). RECUERDA: Esto es inseguro.
                     $qp = $q->prepare("UPDATE personal SET nombre = :nombre, apellido = :apellido, telefono = :telefono, direccion = :direccion, rol = :rol, password = :password WHERE cedula = :cedula");
 
                     $qp->bindParam(':password', $this->password); // Almacenando la clave sin hash
@@ -303,6 +332,7 @@ class Personal extends Conexion
                 $qp->bindParam(':telefono', $this->telefono);
                 $qp->bindParam(':direccion', $this->direccion);
                 $qp->bindParam(':rol', $this->rol);
+                $qp->bindParam(':password', $this->password); // Almacenando la clave sin hash
 
                 $qp->execute();
                 $respuesta['resultado'] = 'modificar';
@@ -354,33 +384,7 @@ class Personal extends Conexion
         return $respuesta;
     }
 
-    // Comprueba existencia por cédula (sin cambios mayores)
-    private function existe($cedula)
-    {
-        // Se puede añadir aquí una validación simple de $cedula si el método es público, 
-        // pero como es privado y se llama desde registrar/modificar, confiamos en la validación principal.
-
-        $respuesta = array();
-        Conexion::conectar();
-        $q = Conexion::getConexion();
-        $q->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        try {
-            $consulta = $q->prepare("SELECT * FROM personal WHERE cedula = :cedula");
-            $consulta->bindValue(':cedula', $cedula);
-            $consulta->execute();
-            $fila = $consulta->fetchAll(PDO::FETCH_BOTH);
-            if ($fila) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception $e) {
-            $respuesta['mensaje'] = $e->getMessage();
-            $respuesta['resultado'] = "error";
-        }
-        // Si hay error en la base de datos, lo más seguro es asumir que no existe y dejar que la operación falle.
-        return false;
-    }
+    
 
     // Consultar y devolver filas formateadas para la tabla (sin validación de entrada, es solo lectura)
     public function consultar()
@@ -406,17 +410,17 @@ class Personal extends Conexion
                     }
                     $mostrar .= "<td class='p-2'>
                 <a onclick='actualizarCampos(this, event)' href='#' 
-                   class='btn btn-sm btn-editar' 
-                   data-bs-toggle='modal' 
-                   data-bs-target='#modalModificar'>
-                   <i class='fa-solid fa-pencil fa-lg'></i>
+                    class='btn btn-sm btn-editar' 
+                    data-bs-toggle='modal' 
+                    data-bs-target='#modalModificar'>
+                    <i class='fa-solid fa-pencil fa-lg'></i>
                 </a>
              </td>";
                     $mostrar .= "<td class='p-2'>
                 <a onclick='eliminarCliente(this, event)' href='#' 
-                   class='btn btn-sm btn-eliminar' 
-                   title='Eliminar Personal'>
-                   <i class='fa-solid fa-trash fa-lg'></i>
+                    class='btn btn-sm btn-eliminar' 
+                    title='Eliminar Personal'>
+                    <i class='fa-solid fa-trash fa-lg'></i>
                 </a>
              </td>";
                     $mostrar .= "</tr>";
