@@ -206,7 +206,39 @@ function consultar() {
 document.addEventListener("DOMContentLoaded", function () {
   consultar();
   inicializarValidaciones();
-  inicializarControlTiempo();
+ $('#buscarpaciente').on('keyup', function() {
+        const searchTerm = $(this).val().toLowerCase().trim();
+
+        // Itera sobre los hijos directos del contenedor (asumiendo que cada hijo es un paciente)
+        // Opcionalmente, puedes buscar una clase específica si usas tarjetas, ej: .paciente-card
+        $('#pacientesContainer > *').each(function() {
+            const $item = $(this);
+            
+            // 🛑 CRUCIAL: Debes tener estas clases (.cedula, .nombre, .apellido) en algún
+            // elemento dentro del DIV de cada paciente que inyecta tu PHP.
+            // Si el texto de Cédula/Nombre/Apellido NO está dentro de un elemento con clase,
+            // puedes usar el texto completo del contenedor: $item.text()
+            
+            // INTENTO 1: Buscar por clases específicas (Ideal si existe)
+            const cedula = $item.find('.cedula').text() || '';
+            const nombre = $item.find('.nombre').text() || '';
+            const apellido = $item.find('.apellido').text() || '';
+            
+            let fullText = (cedula + ' ' + nombre + ' ' + apellido).toLowerCase();
+            
+            // INTENTO 2 (Alternativo): Si no hay clases específicas, busca en todo el texto del contenedor
+            if (!fullText.trim()) {
+                fullText = $item.text().toLowerCase();
+            }
+
+            // 3. Aplica el filtro (muestra si coincide, oculta si no)
+            if (fullText.includes(searchTerm)) {
+                $item.show(); // Muestra el elemento (tarjeta/div)
+            } else {
+                $item.hide(); // Oculta el elemento
+            }
+        });
+    });
 });
 
 function inicializarControlTiempo() {

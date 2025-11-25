@@ -35,9 +35,6 @@
                     </div>
                 </div>
 
-                <nav aria-label="Paginación de pacientes (arriba)">
-                    <ul class="pagination justify-content-center" id="paginacionpacientesTop"></ul>
-                </nav>
 
                 <div class=" row card shadow-sm rounded-4 mb-4">
                     <div class="table-responsive shadow p-1 ">
@@ -60,10 +57,6 @@
                         </table>
                     </div>
                 </div>
-
-                <nav aria-label="Paginación de pacientes (abajo)">
-                    <ul class="pagination justify-content-center" id="paginacionpacientesBottom"></ul>
-                </nav>
 
                 <a href="img/manual.pdf" target="_blank" id="help-button-fab" class="btn rounded-circle shadow-lg"
                     data-bs-toggle="tooltip" data-bs-placement="left" title="Manual de Ayuda">
@@ -236,7 +229,7 @@
     <script src="js/datatables.min.js"></script>
     <script src="js/data.js"></script>
     <script src="js/formUtilss.js"></script>
-    <script src="js/pacientes.js"></script> 
+    <script src="js/paciente.js"></script> 
     <script src="js/main.js"></script>
 
 

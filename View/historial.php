@@ -678,7 +678,7 @@
                         </div>
                         <script src="js/bootstrap.bundle.js"></script>
                         <script src="js/Jquery.min.js"></script>
-                        <script src="js/historias.js"></script>
+                        <script src="js/historia.js"></script>
                         <script src="js/main.js"></script>
                         <script>
                         </script>

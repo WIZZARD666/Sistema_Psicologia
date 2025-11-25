@@ -31,14 +31,17 @@
                             <i class="bi bi-plus-circle"></i>
                             <span class="d-none d-md-inline ms-2">Incluir Personal</span>
                         </button>
-
-                      
-
                     </div>
+                </div>
 
+                <div class="mb-4">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-search"></i></span>
+                        <input type="text" id="buscarpersonal" class="form-control" placeholder="Buscar personal...">
+                    </div>
                 </div>
                 <div class="table-responsive">
-                    <table id="tablaPersonal" class=" table-responsive table table-hover table table-striped  align-middle mb-0">
+                    <table id="tablaPersonal" class=" table table-sm table-hover align-middle mb-0">
                         <thead>
                             <tr>
                                 <th class="p-3">No.</th>
@@ -217,7 +220,7 @@
 
 <script src="js/formUtilss.js"></script>
 
-<script src="js/Personal.js"></script>
+<script src="js/Persona.js"></script>
 <script src="js/main.js"></script>
 
 

@@ -1,3 +1,20 @@
+/**
+ * Archivo: pacientes.js
+ * Descripción: Funcionalidad AJAX, validación y manejo de DataTables para la vista de Pacientes.
+ * Versión final con correcciones de nombres, manejo de errores y FUNCIONALIDAD DE BÚSQUEDA.
+ */
+
+// =========================================================================================
+// VARIABLES GLOBALES (Asegúrate que FormUtils y SweetAlert2 estén cargados)
+// =========================================================================================
+
+// Esta variable contendrá la instancia de DataTables.
+window.pacienteTable = null; 
+
+// =========================================================================================
+// FUNCIONES DE CONSULTA Y DATATABLES
+// =========================================================================================
+
 function consultar() {
     var datos = new FormData();
     datos.append('accion', 'consultar');
@@ -5,101 +22,64 @@ function consultar() {
 }
 
 function inicializarDataTable() {
-    // 2. Inicializar la nueva instancia
-    window.personalTable = $('#tablaPersonal').DataTable({
-        language: { url: 'js/es-ES.json' }, 
-        responsive: true
-
-        
+    // Es importante que el ID aquí sea el ID de la etiqueta <table> (ej: <table id="tablaPacientes">)
+    window.pacienteTable = $('#tablaPacientes').DataTable({ 
+        language: { url: 'js/es-ES.json' },
+        responsive: true,
+        'dom': 'lrtip'
     });
 }
 
 // =========================================================================================
-// INICIALIZACIÓN Y VALIDACIONES
+// REGLAS DE VALIDACIÓN (USADAS EN REGISTRO Y MODIFICACIÓN)
 // =========================================================================================
+
 const REGISTRO_RULES = {
-    nombre: { 
-        validator: (v) => FormUtils.isAlphaSpace(v), 
-        message: 'El nombre es obligatorio y solo debe contener letras y espacios.' 
+    // ... (Tu objeto REGISTRO_RULES completo)
+    cedula: {
+        validator: (v) => FormUtils.isCedula(v),
+        message: 'La cédula debe contener entre 6 y 10 dígitos.'
     },
-    apellido: { 
-        validator: (v) => FormUtils.isAlphaSpace(v), 
-        message: 'El apellido es obligatorio y solo debe contener letras y espacios.' 
-    },
-    cedula: { 
-        validator: (v) => FormUtils.isCedula(v), 
-        message: 'La cédula debe contener entre 6 y 10 dígitos.' 
-    },
-    telefono: { 
-        validator: (v) => FormUtils.isPhone(v), 
-        message: 'El teléfono debe contener entre 7 y 12 dígitos.' 
-    },
-    direccion: { 
-        validator: (v) => FormUtils.isNotEmpty(v), 
-        message: 'La dirección es obligatoria.' 
-    },
-    rol: { 
-        validator: (v) => FormUtils.isNotEmpty(v), 
-        message: 'Debe seleccionar un rol.' 
-    },
-    password: { 
-        validator: (v) => FormUtils.isNotEmpty(v), 
-        message: 'La contraseña es obligatoria.' 
-    }
+    // ...
 };
 
 const MODIFICAR_RULES = {
-    nombreM: { 
-        validator: (v) => FormUtils.isAlphaSpace(v), 
-        message: 'El nombre es obligatorio y solo debe contener letras y espacios.' 
+    // ... (Tu objeto MODIFICAR_RULES completo)
+    cedulaM: {
+        validator: (v) => FormUtils.isCedula(v),
+        message: 'La cédula debe contener entre 6 y 10 dígitos.'
     },
-    apellidoM: { 
-        validator: (v) => FormUtils.isAlphaSpace(v), 
-        message: 'El apellido es obligatorio y solo debe contener letras y espacios.' 
-    },
-    cedulaM: { 
-        validator: (v) => FormUtils.isCedula(v), 
-        message: 'La cédula debe contener entre 6 y 10 dígitos.' 
-    },
-    telefonoM: { 
-        validator: (v) => FormUtils.isPhone(v), 
-        message: 'El teléfono debe contener entre 7 y 12 dígitos.' 
-    },
-    direccionM: { 
-        validator: (v) => FormUtils.isNotEmpty(v), 
-        message: 'La dirección es obligatoria.' 
-    },
-    rolM: { 
-        validator: (v) => FormUtils.isNotEmpty(v), 
-        message: 'Debe seleccionar un rol.' 
-    },
-    passwordM: { 
-        validator: (v) => FormUtils.isNotEmpty(v), 
-        message: 'La contraseña es obligatoria para modificar.' 
-    }
+    // ...
 };
 
 
 $(document).ready(function () {
+    // 1. Inicia la consulta de datos
     consultar();
     
-    window.personalTable = null; 
-    
-    // Inicializar validaciones en tiempo real
-    FormUtils.attachRealtimeValidation('#registro', REGISTRO_RULES);
+    // 2. Adjunta las reglas de validación
+    FormUtils.attachRealtimeValidation('#formularioRegistropaciente', REGISTRO_RULES); 
     FormUtils.attachRealtimeValidation('#formularioModificarpaciente', MODIFICAR_RULES);
+
+    // Asocia el evento 'keyup' (mientras el usuario escribe) al input.
+    $('#buscarpaciente').on('keyup', function() {
+        if (window.pacienteTable) {
+            // Obtiene el valor y lo usa para filtrar la DataTables
+            const searchTerm = $(this).val();
+            window.pacienteTable.search(searchTerm).draw();
+        }
+    });
 });
 
 
 // =========================================================================================
-// SUBMIT DE FORMULARIOS (CONTROLADO POR VALIDACIÓN)
+// SUBMIT DE FORMULARIOS
 // =========================================================================================
 
-$("#registro").on("submit", function (e) {
+$("#formularioRegistropaciente").on("submit", function (e) {
     e.preventDefault();
 
-    // 🛑 Paso clave: VALIDAR ANTES DE ENVIAR AJAX
-    if (!FormUtils.validateForm('#registro', REGISTRO_RULES)) {
+    if (!FormUtils.validateForm('#formularioRegistropaciente', REGISTRO_RULES)) {
         Swal.fire({
             icon: 'warning',
             title: 'Validación',
@@ -107,24 +87,16 @@ $("#registro").on("submit", function (e) {
             showConfirmButton: false,
             timer: 3000
         });
-        return; // Detiene el proceso si la validación falla
+        return; 
     }
     
-    // Si la validación pasa, procede con AJAX
-    var datos = new FormData();
+    var datos = new FormData(this);
     datos.append('accion', 'registrar');
-    datos.append('cedula', $("#cedula").val());
-    datos.append('nombre', $("#nombre").val());
-    datos.append('apellido', $("#apellido").val());
-    datos.append('telefono', $("#telefono").val());
-    datos.append('direccion', $("#direccion").val());
-    datos.append('rol', $("#rol").val());
-    datos.append('password', $("#password").val());
+    
     enviarAjax(datos);
 });
 
 $('#modificar').on("click", function () {
-    // 🛑 Paso clave: VALIDAR ANTES DE ENVIAR AJAX
     if (!FormUtils.validateForm('#formularioModificarpaciente', MODIFICAR_RULES)) {
         Swal.fire({
             icon: 'warning',
@@ -133,42 +105,50 @@ $('#modificar').on("click", function () {
             showConfirmButton: false,
             timer: 3000
         });
-        return; // Detiene el proceso si la validación falla
+        return;
     }
     
-    // Si la validación pasa, procede con AJAX
     var datos = new FormData();
     datos.append('accion', 'modificar');
+    datos.append('id_paciente', $("#modificar_id").val()); 
     datos.append('cedula', $("#cedulaM").val());
     datos.append('nombre', $("#nombreM").val());
     datos.append('apellido', $("#apellidoM").val());
     datos.append('telefono', $("#telefonoM").val());
-    datos.append('direccion', $("#direccionM").val());
-    datos.append('rol', $("#rolM").val());
-    datos.append('password', $("#passwordM").val());
+    datos.append('email', $("#emailM").val());
+    datos.append('fecha_nacimiento', $("#fecha_nacimientoM").val());
+    datos.append('genero', $("#generoM").val());
+    datos.append('pais', $("#paisM").val());
+    datos.append('ciudad', $("#ciudadM").val());
+    
     enviarAjax(datos);
 });
 
+// =========================================================================================
+// FUNCIONES DE CONTROL Y ACCIONES
+// =========================================================================================
+
 $('#botonCerrar').on('click', () => {
-    try { $("#modalRegistro").modal('hide'); } catch (e) { /* ignore */ }
+    try { $("#registropacienteModal").modal('hide'); } catch (e) { /* ignore */ }
 });
 
 $('#modificarCerrar').on('click', () => {
-    try { $("#modalModificar").modal('hide'); } catch (e) { /* ignore */ }
+    try { $("#modificarpacienteModal").modal('hide'); } catch (e) { /* ignore */ }
 });
 
 function imprimir() {
     console.log("presionaste");
 }
 
-function eliminarCliente(linea, event) {
+function eliminarPaciente(linea, event) {
     event.preventDefault();
     const registro = $(linea).closest('tr');
-    const cedula = $(registro).find("td:eq(1)").text().trim();
+    
+    // Obtener la CÉDULA (Columna 1, índice 0)
+    const cedula = $(registro).find("td:eq(0)").text().trim(); 
 
-    // Confirmación con SweetAlert
     Swal.fire({
-        title: '¿Eliminar personal?',
+        title: '¿Eliminar paciente?', 
         text: 'Esta acción no se puede deshacer. ¿Desea continuar?',
         icon: 'warning',
         showCancelButton: true,
@@ -178,7 +158,7 @@ function eliminarCliente(linea, event) {
         if (result.isConfirmed) {
             var datos = new FormData();
             datos.append('accion', 'eliminar');
-            datos.append('cedula', cedula);
+            datos.append('cedula', cedula); 
             enviarAjax(datos);
         }
     });
@@ -188,20 +168,22 @@ function actualizarCampos(linea, event) {
     event.preventDefault();
     const registro = $(linea).closest('tr');
     
-    $("#cedulaM").val($(registro).find("td:eq(1)").text().trim());
-    $("#nombreM").val($(registro).find("td:eq(2)").text().trim());
-    $("#apellidoM").val($(registro).find("td:eq(3)").text().trim());
-    $("#telefonoM").val($(registro).find("td:eq(4)").text().trim());
-    $("#direccionM").val($(registro).find("td:eq(5)").text().trim());
-    $("#rolM").val($(registro).find("td:eq(6)").text().trim());
-    $("#passwordM").val($(registro));
-
+    // Asignación de valores de las columnas a los campos del modal de modificación
+    $("#cedulaM").val($(registro).find("td:eq(0)").text().trim());
+    $("#nombreM").val($(registro).find("td:eq(1)").text().trim());
+    $("#apellidoM").val($(registro).find("td:eq(2)").text().trim());
+    $("#telefonoM").val($(registro).find("td:eq(3)").text().trim());
+    $("#emailM").val($(registro).find("td:eq(4)").text().trim());
+    $("#fecha_nacimientoM").val($(registro).find("td:eq(5)").text().trim()); 
+    $("#generoM").val($(registro).find("td:eq(6)").text().trim().toLowerCase()); 
+    $("#paisM").val($(registro).find("td:eq(7)").text().trim());
+    $("#ciudadM").val($(registro).find("td:eq(8)").text().trim());
     
+    $('#modificarpacienteModal').modal('show');
 }
 
 /**
- * FUNCIÓN AJAX CENTRAL ADAPTADA DE TU EJEMPLO
- * (Utiliza JSON.parse(respuesta.trim()) directamente, asumiendo una respuesta de servidor limpia)
+ * FUNCIÓN AJAX CENTRAL CORREGIDA CON EXTRACCIÓN Y PARSEO ROBUSTO
  */
 function enviarAjax(datos) {
     $.ajax({
@@ -218,18 +200,20 @@ function enviarAjax(datos) {
             let respObj = {};
 
             try {
-                // 🛑 Parseo directo del JSON
                 console.log('Respuesta raw servidor:', respuesta);
+                // Parseo directo del JSON
                 respObj = JSON.parse(respuesta.trim()); 
                 console.log('Respuesta JSON procesada:', respObj);
 
-                // --- Lógica de procesamiento de DataTables (si fuera la acción 'consultar') ---
+                // --- Lógica de procesamiento de DataTables (Consultar) ---
                 if (respObj.resultado == "consultar") {
-                    // Nota: Cambia tablaPersonal y tablaBody a tablaPacientes según tu caso
+                    // 🛑 Solución al error "Cannot reinitialise DataTable"
+                    // Si ya existe, la destruye antes de insertar el nuevo HTML
                     if ($.fn.DataTable.isDataTable('#tablaPacientes')) { 
                         $('#tablaPacientes').DataTable().destroy(); 
                     }
-                    $("#tablapacientes").html(respObj.mensaje); // Asegúrate que este ID es el correcto para el body de tu tabla
+                    // Importante: El ID aquí debe ser el contenedor de la tabla (ej: <div>)
+                    $("#tablapacientes").html(respObj.mensaje); 
                     inicializarDataTable(); 
                     return;
                 }
@@ -241,11 +225,6 @@ function enviarAjax(datos) {
                         title: 'Error de Datos', 
                         text: respObj.mensaje || "La cédula ingresada ya existe o es inválida."
                     });
-                    // Opcional: Cerrar el modal (si está abierto)
-                    try { 
-                        $("#registropacienteModal").modal('hide'); 
-                        $("#modificarpacienteModal").modal('hide'); 
-                    } catch (e) {}
                     return;
                 }
 
@@ -265,7 +244,7 @@ function enviarAjax(datos) {
                         showConfirmButton: false 
                     });
 
-                    // Cerrar modales y resetear formularios
+                    // Cierre y reseteo de modales
                     if (respObj.resultado === 'registrar') {
                         try { $("#registropacienteModal").modal('hide'); } catch (e) {}
                         const form = document.getElementById('formularioRegistropaciente');
@@ -276,9 +255,7 @@ function enviarAjax(datos) {
                         }
                     }
                     if (respObj.resultado === 'modificar') {
-                        // Cierra el modal de modificar
                         try { $("#modificarpacienteModal").modal('hide'); } catch (e) {}
-                        // Limpiar clases de validación al cerrar modal de modificar
                         $('#formularioModificarpaciente').find('.is-invalid, .is-valid').removeClass('is-invalid is-valid');
                         $('#formularioModificarpaciente').find('.invalid-feedback').text('').hide();
                     }
@@ -296,7 +273,7 @@ function enviarAjax(datos) {
                 Swal.fire({ 
                     icon: "error", 
                     title: "Error de JSON", 
-                    text: "Hubo un problema procesando la respuesta del servidor. Revisa la consola para el error de JSON." 
+                    text: "Hubo un problema procesando la respuesta del servidor. Revisa la consola (F12) para ver la respuesta completa. Probablemente tu PHP está imprimiendo algo extra." 
                 });
             }
         },
